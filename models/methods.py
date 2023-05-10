@@ -1,10 +1,11 @@
 import psycopg2
+import os
 
-conn = psycopg2.connect(dbname='postgres',
-                        user='postgres',
-                        password='8150',
-                        host='localhost',
-                        port="5432")
+conn = psycopg2.connect(dbname=os.environ.get('DBNAME'),
+                        user=os.environ.get('USER'),
+                        password=os.environ.get('PASSWORD'),
+                        host=os.environ.get('HOST'),
+                        port=os.environ.get('PORT'))
 
 cursor = conn.cursor()
 

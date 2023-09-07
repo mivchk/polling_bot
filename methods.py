@@ -1,5 +1,13 @@
 import psycopg2
 import os
+from dotenv import load_dotenv
+
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+print(dotenv_path)
+if os.path.exists(dotenv_path):
+    load_dotenv(dotenv_path)
+
+print(os.environ.get('DBNAME'))
 
 conn = psycopg2.connect(dbname=os.environ.get('DBNAME'),
                         user=os.environ.get('USER'),
@@ -7,11 +15,17 @@ conn = psycopg2.connect(dbname=os.environ.get('DBNAME'),
                         host=os.environ.get('HOST'),
                         port=os.environ.get('PORT'))
 
+# conn = psycopg2.connect(dbname="postgres",
+#                         user="postgres",
+#                         password="8150",
+#                         host="localhost",
+#                         port="5432")
+
 cursor = conn.cursor()
 
 
 def insert_cus(customer_id, gender, age):
-    statement = "insert into customers(customer_id, gender, age) " \
+    statement = "insert into public.customers(customer_id, gender, age) " \
                 "values (%s, %s, %s)" \
                 "on conflict (customer_id) do nothing "
     record = (customer_id, gender, age)

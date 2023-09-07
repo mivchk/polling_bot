@@ -9,7 +9,7 @@ from aiogram.types import (CallbackQuery, InlineKeyboardButton,
 import os
 from keyboards.keyboard_menu import DefKey, GenKey, AgeKey
 from lexicon.lexicon_ru import welcome_text
-from models import methods as mt
+import methods as mt
 import aioredis
 from dotenv import load_dotenv
 from aiogram.fsm.storage.redis import RedisStorage
@@ -18,6 +18,8 @@ from aiogram.fsm.storage.redis import RedisStorage
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
+
+print(dotenv_path)
 
 bot: Bot = Bot(os.environ.get('API_TOKEN'))
 redis = aioredis.from_url(os.environ.get('REDISURL'))
@@ -41,8 +43,11 @@ async def starting_comm(msg: Message, state: FSMContext):
     if len(mt.get_data(msg.from_user.id)) == 0:
         await msg.answer(text=welcome_text)
         await state.set_state(Question.starting)
+        print(mt.get_data(msg.from_user.id))
     else:
         await msg.answer('Вы уже прошли опрос, спасибо за ваши ответы!')
+        print(mt.get_data(msg.from_user.id))
+
 
 
 @dp.message(Command(commands='cancel'), ~StateFilter(default_state))
